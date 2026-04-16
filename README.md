@@ -8,15 +8,13 @@ The implementation relies heavily on the **SageMath** ecosystem, which provides 
 
 # Overview
 
-The core workflow is:
+The core steps taking place are:
 
 1. Generate Dyck words.
-2. Convert Dyck words into arch diagrams.
-3. Build meanders from pairs of arch diagrams.
-4. Construct the meander matrix.
-5. Analyze symmetry orbits.
-6. Perform statistical and polynomial analysis.
-7. Visualize diagrams and matrix structure.
+2. Build meanders from pairs of arch diagrams.
+3. Construct the meander matrix.
+4. Analyze meander matrix data, including orbits, distribution of entries, and more.
+5. Visualize diagrams and matrix structure.
 
 ---
 
@@ -105,7 +103,7 @@ A **meander** is created from two Dyck words:
 - One representing the **top arches**
 - One representing the **bottom arches**
 
-Each arch diagram is converted into a permutation.
+Each arch diagram is also converted to and stored as a permutation.
 
 The meander permutation is computed by:
 
@@ -133,9 +131,7 @@ Entry:
 M[i,j] = r
 ```
 
-where:
-
-- `r` is the number of components of the meander formed by arch diagrams `i` and `j`.
+where `r` is the number of components of the meander formed by arch diagrams `i` and `j`.
 
 Alternatively:
 
@@ -145,10 +141,7 @@ M[i,j] = q^r
 
 when working in a polynomial ring.
 
-This enables computation of:
-
-- Determinants
-- Polynomial invariants
+This enables manual computation of the determinant.
 
 ---
 
@@ -223,18 +216,18 @@ Rotation continues until returning to the original element.
 
 ---
 
-## meander_orbits
+## arch_orbits
 
-Enumerates all meander orbits:
+Enumerates all arch orbits:
 
-- Avoids double counting
-- Tracks visited elements
+- Avoids double counting by tracking visited elements
 
 ---
 
-## arch_orbits
+## meander_orbits
 
-Same as `meander_orbits`, but applied only to arch diagrams.
+Same as `arch_orbits`, but applied to meanders.
+- Has options for dihedral and symmetric actions. 
 
 ---
 
@@ -242,9 +235,9 @@ Same as `meander_orbits`, but applied only to arch diagrams.
 
 Produces:
 
-- Orbit labeling matrix
+- Matrix with orbits highlighted different colors
 - Orbit counts
-- Orbit structure
+- List of orbits
 
 Each orbit is assigned a unique color label.
 
@@ -266,7 +259,7 @@ plt.show()
 
 Returns orbit representatives.
 
-For:
+Behavior differs for different objects:
 
 - **Meanders:** arbitrary representative
 - **Arch diagrams:** maximal height element
@@ -281,29 +274,35 @@ Implemented using:
 component_sum_polynomial(n, x)
 
 arch_orbit_polynomials(n)
+
+arch_polynomial_graphs(n, x1, x2)
 ```
+
+## component_sum_polynomial(n, x)
+
+Computes the component sum polynomial of a single arch diagram as defined in the paper.
 
 ## arch_orbit_polynomials
 
-Computes component sum polynomials using orbit representatives of arch diagrams.
+Computes component sum polynomials of arch diagram orbit representatives.
+
+## arch_polynomial_graphs(n, x_1, x_2)
+
+Computes and graphs the component sum polynomials of arch diagram orbit representatives. x_1 and x_2 dictate the x values represented in the graph.
 
 ---
 
-# Matrix Analysis Tools
+# Matrix Analysis
 
 ```python
 matrix_data(M, heights, should_print=True)
 ```
 
-Computes:
-
-- Row sums
-- Height correlations
-- Statistical summaries
+Computes various meander matrix data.
 
 ---
 
-## Returned Data
+## Returns
 
 - Row sums
 - Minimum row index
@@ -370,47 +369,11 @@ plt.show()
 
 Lexicographic ordering is used by default because:
 
-- Easy to generate recursively
-- Refines the Tamari lattice
-- Produces visually structured matrices
-- Reveals clearer pattern behavior
+- It is easy to generate recursively
+- It is a refinement of the Tamari lattice
+- It produces visually interesting matrices (heuristic).
 
 Other orderings remain available for experimentation.
 
 ---
 
-# Output Summary
-
-This toolkit enables:
-
-- Generation of Dyck words
-- Construction of arch diagrams
-- Creation of meanders
-- Computation of meander matrices
-- Orbit decomposition
-- Polynomial invariant analysis
-- Structural visualization
-- Statistical exploration
-
----
-
-# Future Extensions (Optional)
-
-Potential improvements:
-
-- Dihedral symmetry actions
-- Parallelized matrix generation
-- Export tools for diagrams
-- Interactive visualization
-
----
-
-# License
-
-(Add your license here.)
-
----
-
-# Citation
-
-If this code supports academic work, include citation information here.
